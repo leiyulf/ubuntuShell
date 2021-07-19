@@ -50,49 +50,33 @@ downloadNginx(){
 	cd ./$packageName
 }
 
-#下载Gcc
-downloadGcc()
-{
+#包下载
+aptDownload(){
+	pkgName=$1
+	errMsg=$2
 	dpkg -s build-essential
 	if [ "$?" != "0" ];then
 		apt-get install -y build-essential
 		if [ "$?" != "0" ];then
 			isError=1
-			errorMsg="Gcc安装失败"
 		fi
 	fi
 }
 
+#下载Gcc
+downloadGcc(){ 
+	aptDownload "build-essential" "Gcc安装失败" 
+}
 #下载Pcre
+
 downloadPcre(){
-	dpkg -s libpcre3
-	if [ "$?" != "0" ];then
-                apt-get install -y libpcre3
-		if [ "$?" != "0" ];then
-			isError=1
-			errorMsg="Pcre安装失败"
-		fi
-	fi
-	dpkg -s libpcre3-dev
-	if [ "$?" != "0" ];then
-                apt-get install -y libpcre3-dev
-		if [ "$?" != "0" ];then
-			isError=1
-			errorMsg="Pcre-dev安装失败"
-		fi
-        fi
+	aptDownload "libpcre3" "Pcre安装失败" 
+	aptDownload "libpcre3-dev" "Pcre-dev安装失败" 
 }
 
 #下载Zlib
 downloadZlib(){
-	dpkg -s zlib1g-dev
-	if [ "$?" == "0" ];then
-                apt-get install -y zlib1g-dev
-		if [ "$?" != "0" ];then
-			isError=1
-			errorMsg="Zlib安装失败"
-		fi
-        fi
+	aptDownload "zlib1g-dev" "Zlib安装失败"
 }
 
 #配置安装nginx
